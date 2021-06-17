@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  database-cloud:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-06-17T18:57:20.2345218+01:00"
+    description: A Helm chart for Kubernetes
+    digest: ed87b416e37e0a6c45525a72c1d05ad7bc3cb3e56ae1a8ea512818d7869b443b
+    name: database-cloud
+    type: application
+    urls:
+    - https://github.com/itmwiw/helm.git/database-cloud-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-06-17T18:57:20.2345218+01:00"
