@@ -1,0 +1,4 @@
+#dbName: dbtest
+appNamespace: test-egress # namespace where the app that will use the database is deployed
+storageGB: 20
+postgresVersion: "11.10"

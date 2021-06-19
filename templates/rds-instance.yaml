@@ -1,0 +1,26 @@
+apiVersion: database.advatys.fr/v1alpha1
+kind: PostgreSQLInstance
+metadata:
+  name: {{ include "database-cloud.fullname" . }}
+  namespace: {{ .Values.appNamespace }}
+spec:
+  parameters:
+    storageGB: {{ .Values.storageGB }}
+    version: {{ quote .Values.postgresVersion }}
+    location: us-east-1
+    namespace: {{ .Values.appNamespace }}
+    vpcName: database-cloud
+    authorizedIps:
+    {{- range $index, $egressIp := (lookup "network.openshift.io/v1" "NetNamespace" .Values.appNamespace .Values.appNamespace).egressIPs }}
+    - cidrIp: {{ $egressIp }}/32
+    {{- end }}
+    {{- range $index, $egressIp := .Values.authorizedIps }}
+    - cidrIp: {{ $egressIp }}/32
+    {{- end }}
+  compositionSelector:
+    matchLabels:
+      provider: aws
+      vpc: {{ if (.Values.vpc) }} {{ .Values.vpc }} {{ else if (lookup "ec2.aws.crossplane.io/v1beta1" "VPC" .Values.appNamespace "database-cloud-vpc") }}exists{{ else if (lookup "ec2.aws.crossplane.io/v1beta1" "Subnet" .Values.appNamespace "database-cloud-subnet-a") }}subnet-a{{ else if (lookup "ec2.aws.crossplane.io/v1beta1" "Subnet" .Values.appNamespace "database-cloud-subnet-b") }}subnet-b{{ else }}new{{ end }}
+ # writeConnectionSecretToRef:
+ #   name: {{ include "database-cloud.fullname" . }}-conn
+ #   namespace: {{ .Values.appNamespace }}
